@@ -1,0 +1,17 @@
+#!/bin/bash
+
+ddig () 
+{ 
+    domain=$(normalizedomain $1);
+    dig1=$(dig @8.8.8.8 +short $domain);
+    echo -e "\nA:\t" $dig1;
+    echo -e "NS:\t" $(dig @8.8.8.8 +short $domain NS);
+    echo -e "rDNS:\t" $(dig @8.8.8.8 +short -x $dig1);
+    echo -e "MX:\t" $(dig @8.8.8.8 +short $domain MX);
+    echo -e "TXT:\t" $(dig @8.8.8.8 +short $domain TXT) "\n"
+}
+
+normalizedomain (){ 
+    echo "$1" | sed -r -e 's/https?:\/\///' -e 's/\/.*//' -e 's,\.$,,' | tr '[:upper:]' '[:lower:]'
+}
+
