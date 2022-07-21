@@ -1,2 +1,2 @@
 # bash_scripts
-This is for my Bash scripts
+This is for my work Bash scripts
