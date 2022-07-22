@@ -1,2 +1,2 @@
-# bash_scripts
-This is for my Bash scripts
+# bash_scripts-nx
+This is for my work Bash scripts
