@@ -8,6 +8,7 @@ if [[ "$domain" == *.* ]]; then
   echo -e "rDNS:\t" $(dig +short -x $dig1 @8.8.8.8)
   echo -e "MX:\t" $(dig +short MX $domain @8.8.8.8)
   echo -e "TXT:\t" $(dig +short TXT $domain @8.8.8.8)
+  echo -e "DKIM:\t" $(dig +short TXT default._domainkey.${domain} @8.8.8.8)
   echo -e "DMARC:\t" $(dig +short TXT _dmarc.${domain} @8.8.8.8) "\n"
 else 
   echo "Not a domain"
