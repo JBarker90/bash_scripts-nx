@@ -81,6 +81,9 @@ else
     PS1="[${txtcyn}\$(date +%H%M)${txtrst}][\u@${hostname_region} \W]\$ "
 fi
 
+# Custom Stuff
+PATH="${PATH}:${HOME}/bin"
+
 max ()
 {
     if [[ $HOSTNAME != cloudhost-* ]]; then
