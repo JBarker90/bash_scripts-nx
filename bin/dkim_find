@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "\"v=DKIM1; k=rsa; p=$(sudo grep -v -- ^- /etc/domainkeys/$1/rsa.public | tr -d '\n');\""
