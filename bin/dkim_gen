@@ -1,0 +1,7 @@
+#!/bin/bash
+
+sudo -u iworx ~iworx/bin/domainkeys.pex --domain $1
+
+wait
+
+sudo cat -n /etc/domainkeys/$1/rsa.public
