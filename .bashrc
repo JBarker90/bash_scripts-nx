@@ -31,6 +31,8 @@ alias ls='ls -F --color=auto'
 alias lll="ls -lchart"
 alias dquota='sudo quota -sg $(sup_getusr)'
 alias whois='whois -n'
+alias ll='ls -laF'
+
 
 # only append to bash history to prevent it from overwriting it when you have
 # multiple ssh windows open
