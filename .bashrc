@@ -30,7 +30,7 @@ alias chgrp='chgrp --preserve-root'
 alias ls='ls -F --color=auto'
 alias lll="ls -lchart"
 alias dquota='sudo quota -sg $(sup_getusr)'
-#alias ipinfo='curl https://ipinfo.io/$1'
+alias whois='whois -n'
 
 # only append to bash history to prevent it from overwriting it when you have
 # multiple ssh windows open
