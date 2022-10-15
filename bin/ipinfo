@@ -1,2 +1,3 @@
 #!/bin/bash
-curl https://ipinfo.io/$1
+
+curl -s https://ipinfo.io/$1 | jq
