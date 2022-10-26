@@ -1,0 +1,9 @@
+#!/bin/bash
+    
+timezone=$(date | awk '{print $5}');
+if [ $timezone != "EDT" ] && [ $timezone != "EST" ]; then
+    date;
+    TZ=America/Detroit date;
+else
+    date;
+fi
