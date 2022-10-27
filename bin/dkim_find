@@ -3,6 +3,10 @@
 domain=$1
 dkim_key=$(sudo grep -v -- ^- /etc/domainkeys/${domain}/rsa.public | tr -d '\n')
 
-echo -e "\nHost:\t" "default._domainkey.${domain}"
-echo -e "Value:\t" "v=DKIM1; k=rsa; p=${dkim_key};"
+if [[ -e "/etc/domainkeys/${domain}/rsa.public" ]]; then
+    echo -e "\nHost:\t" "default._domainkey.${domain}"
+    echo -e "Value:\t" "v=DKIM1; k=rsa; p=${dkim_key};"
 
+else
+    echo "Sorry! It looks like this domain is missing a DKIM key. Try creating one or checking you domain."
+fi
