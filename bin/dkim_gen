@@ -1,7 +1,12 @@
 #!/bin/bash
 
-sudo -u iworx ~iworx/bin/domainkeys.pex --domain $1
+domain=$1
 
+if [[ $(hostname -s) == "cloudhost-"* ]]; then
+    sudo -u iworx ~iworx/bin/domainkeys.pex --domain $domain
+else
+    ~iworx/bin/domainkeys.pex --domain $domain
+fi
 wait
 
-sudo cat -n /etc/domainkeys/$1/rsa.public
+sudo cat -n /etc/domainkeys/${domain}/rsa.public
