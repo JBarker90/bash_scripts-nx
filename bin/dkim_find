@@ -9,5 +9,6 @@ if [[ -e "/etc/domainkeys/${domain}/rsa.public" ]]; then
     echo -e "Value:\t" "v=DKIM1; k=rsa; p=${dkim_key};"
 
 else
+    echo "ATTENTION! ERROR!"
     echo "Sorry! It looks like this domain is missing a DKIM key. Try creating one or checking you domain."
 fi
