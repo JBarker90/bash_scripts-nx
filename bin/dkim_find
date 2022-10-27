@@ -5,7 +5,8 @@ domain=$1
 dkim_key=$(sudo grep -v -- ^- /etc/domainkeys/${domain}/rsa.public | tr -d '\n')
 
 if [[ -e "/etc/domainkeys/${domain}/rsa.public" ]]; then
-    echo -e "\nHost:\t" "default._domainkey.${domain}"
+    echo -e "\nType:\t" "TXT"
+    echo -e "Host:\t" "default._domainkey.${domain}"
     echo -e "Value:\t" "v=DKIM1; k=rsa; p=${dkim_key};"
 
 else
