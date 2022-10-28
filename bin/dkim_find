@@ -2,7 +2,7 @@
 # This script will check if the supplied domain has a DKIM key.
 # If it exists, it will print out the public key into a DNS format to copy/paste
 domain=$1
-dkim_key=$(sudo grep -v -- ^- /etc/domainkeys/${domain}/rsa.public | tr -d '\n')
+dkim_key=$(sudo grep -v -- ^- /etc/domainkeys/${domain}/rsa.public 2>/dev/null | tr -d '\n')
 
 if [[ -e "/etc/domainkeys/${domain}/rsa.public" ]]; then
     echo -e "\nType:\t" "TXT"
