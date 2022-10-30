@@ -31,11 +31,14 @@ function usage(){
 }
 
 function dkim_gen(){
-    if [[ $(hostname -s) == "JBARKER"-* ]]; then
-        echo "Your domain name is ${DOMAIN} and you are on a mac!"
+    if [[ $(hostname -s) == "cloudhost-"* ]]; then
+        sudo -u iworx ~iworx/bin/domainkeys.pex --domain $domain
     else
-        echo "It appears you are somewhere else."
+        ~iworx/bin/domainkeys.pex --domain $domain
     fi
+    wait
+
+    sudo cat -n /etc/domainkeys/${domain}/rsa.public
 }
 
 function dkim_find(){
