@@ -31,14 +31,19 @@ function usage(){
 }
 
 function dkim_gen(){
-    if [[ $(hostname -s) == "cloudhost-"* ]]; then
-        sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN
+    if [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
+        echo "It appears ${DOMAIN} already has a DKIM key. Try running this to see format: <dkim> -f [<domain>]"
+        exit;
     else
-        ~iworx/bin/domainkeys.pex --domain $DOMAIN
-    fi
-    wait
+        if [[ $(hostname -s) == "cloudhost-"* ]]; then
+            sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN
+        else
+            ~iworx/bin/domainkeys.pex --domain $DOMAIN
+        fi
+        wait
 
-    sudo cat -n /etc/domainkeys/${DOMAIN}/rsa.public
+        sudo cat -n /etc/domainkeys/${DOMAIN}/rsa.public
+    fi  
 }
 
 function dkim_find(){
@@ -49,7 +54,7 @@ function dkim_find(){
 
     else
         echo "ATTENTION!!!"
-        echo "Sorry! It looks like this domain is missing a DKIM key. Try creating one or checking your domain."
+        echo "Sorry! It looks like ${DOMAIN} is missing a DKIM key. Try running this to see format: <dkim> -c [<domain>]"
     fi
 }
 
