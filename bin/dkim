@@ -8,7 +8,7 @@
 #   Value:	 v=DKIM1; k=rsa; p=<Key_Value>;
 
 DOMAIN=$1
-DKIM_KEY=$(cat /home/jonathan/sample.txt 2>/dev/null)
+DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/${domain}/rsa.public 2>/dev/null | tr -d '\n')
 
 help(){
     # Displays Help message
