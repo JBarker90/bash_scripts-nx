@@ -7,7 +7,7 @@
 #   Host:	 default._domainkey.domain.com
 #   Value:	 v=DKIM1; k=rsa; p=<Key_Value>;
 
-DOMAIN=$1
+DOMAIN=$2
 DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/${DOMAIN}/rsa.public 2>/dev/null | tr -d '\n')
 
 help(){
