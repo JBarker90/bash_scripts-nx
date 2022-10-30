@@ -15,7 +15,7 @@ help(){
     echo "This bash script can be used to check if a DKIM key exists for a domain and generate one if needed."
 	echo "It can also find the DKIM public key file and output the DKIM value in a DNS record format."
 	echo 
-	echo "Syntax: <dkim.sh> [-h|c|f] [<domain>]"
+	echo "Syntax: <dkim> [-h|c|f] [<domain>]"
 	echo "options:"
 	echo "-h    Print this Help message."
 	echo "-c    Create a DKIM Key for a specific domain."
@@ -23,7 +23,7 @@ help(){
 }
 
 function usage(){
-    echo "Syntax: <dkim.sh> [-h|c|f] [<domain>]"
+    echo "Syntax: <dkim> [-h|c|f] [<domain>]"
 	echo "options:"
 	echo "-h    Print this Help message."
 	echo "-c    Create a DKIM Key for a specific domain."
@@ -32,7 +32,8 @@ function usage(){
 
 function dkim_gen(){
     if [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
-        echo "It appears ${DOMAIN} already has a DKIM key. Try running this to see format: <dkim> -f [<domain>]"
+        echo "It appears ${DOMAIN} already has a DKIM key. Try running this to see format:" 
+        echo "Syntax: <dkim> -f [<domain>]"
         exit;
     else
         if [[ $(hostname -s) == "cloudhost-"* ]]; then
@@ -54,7 +55,8 @@ function dkim_find(){
 
     else
         echo "ATTENTION!!!"
-        echo "Sorry! It looks like ${DOMAIN} is missing a DKIM key. Try running this to see format: <dkim> -c [<domain>]"
+        echo "Sorry! It looks like ${DOMAIN} is missing a DKIM key. Try running this to see format:" 
+        echo "Syntax: <dkim> -c [<domain>]"
     fi
 }
 
