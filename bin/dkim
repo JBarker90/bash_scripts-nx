@@ -8,7 +8,7 @@
 #   Value:	 v=DKIM1; k=rsa; p=<Key_Value>;
 
 DOMAIN=$1
-DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/${domain}/rsa.public 2>/dev/null | tr -d '\n')
+DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/${DOMAIN}/rsa.public 2>/dev/null | tr -d '\n')
 
 help(){
     # Displays Help message
@@ -32,13 +32,13 @@ function usage(){
 
 function dkim_gen(){
     if [[ $(hostname -s) == "cloudhost-"* ]]; then
-        sudo -u iworx ~iworx/bin/domainkeys.pex --domain $domain
+        sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN
     else
-        ~iworx/bin/domainkeys.pex --domain $domain
+        ~iworx/bin/domainkeys.pex --domain $DOMAIN
     fi
     wait
 
-    sudo cat -n /etc/domainkeys/${domain}/rsa.public
+    sudo cat -n /etc/domainkeys/${DOMAIN}/rsa.public
 }
 
 function dkim_find(){
