@@ -42,10 +42,14 @@ function dkim_gen(){
 }
 
 function dkim_find(){
-    if [[ -e "/home/jonathan/sample.txt" ]]; then
-        echo -e "\nMessage Test: ${DKIM_KEY}"
+    if [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
+        echo -e "\nType:\t" "TXT"
+        echo -e "Host:\t" "default._domainkey.${DOMAIN}"
+        echo -e "Value:\t" "v=DKIM1; k=rsa; p=${DKIM_KEY};"
+
     else
-        echo "It appears this file is missing. Try running: <dkim.sh> -c [<domain>]"
+        echo "ATTENTION!!!"
+        echo "Sorry! It looks like this domain is missing a DKIM key. Try creating one or checking your domain."
     fi
 }
 
