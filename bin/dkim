@@ -13,21 +13,21 @@ DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/${DOMAIN}/rsa.public 2>/dev/null |
 help(){
     # Displays Help message
     echo "This bash script can be used to check if a DKIM key exists for a domain and generate one if needed."
-	echo "It can also find the DKIM public key file and output the DKIM value in a DNS record format."
-	echo 
-	echo "Syntax: <dkim> [-h|c|f] [<domain>]"
-	echo "options:"
-	echo "-h    Print this Help message."
-	echo "-c    Create a DKIM Key for a specific domain."
-	echo "-f    Finds DKIM key on server and Formats it in DNS record values."
+    echo "It can also find the DKIM public key file and output the DKIM value in a DNS record format."
+    echo 
+    echo "Syntax: <dkim> [-h|c|f] [<domain>]"
+    echo "options:"
+    echo "-h    Print this Help message."
+    echo "-c    Create a DKIM Key for a specific domain."
+    echo "-f    Finds DKIM key on server and Formats it in DNS record values."
 }
 
 function usage(){
     echo "Syntax: <dkim> [-h|c|f] [<domain>]"
-	echo "options:"
-	echo "-h    Print this Help message."
-	echo "-c    Create a DKIM Key for a specific domain."
-	echo "-f    Finds DKIM key on server and Formats it in DNS record values."
+    echo "options:"
+    echo "-h    Print this Help message."
+    echo "-c    Create a DKIM Key for a specific domain."
+    echo "-f    Finds DKIM key on server and Formats it in DNS record values."
 }
 
 function dkim_gen(){
