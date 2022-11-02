@@ -32,7 +32,7 @@ function usage(){
 
 function dkim_gen(){
     if [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
-        echo "It appears ${DOMAIN} already has a DKIM key. Try running this to see format:" 
+        echo "It appears ${DOMAIN} already has a DKIM key. Try running this to see the DNS values:" 
         echo "Syntax: <dkim> -f [<domain>]"
         exit;
     else
@@ -55,7 +55,7 @@ function dkim_find(){
 
     else
         echo "ATTENTION!!!"
-        echo "Sorry! It looks like ${DOMAIN} is missing a DKIM key. Try running this to see format:" 
+        echo "Sorry! It looks like ${DOMAIN} is missing a DKIM key. Try running this to create a DKIM key:" 
         echo "Syntax: <dkim> -c [<domain>]"
     fi
 }
