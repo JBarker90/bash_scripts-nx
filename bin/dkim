@@ -54,7 +54,6 @@ function dkim_find(){
         echo -e "Value:\t" "v=DKIM1; k=rsa; p=${DKIM_KEY};"
 
     else
-        echo "ATTENTION!!!"
         echo "Sorry! It looks like ${DOMAIN} is missing a DKIM key. Try running this to create a DKIM key:" 
         echo "Syntax: <dkim> -c [<domain>]"
     fi
