@@ -41,15 +41,9 @@ function dkim_gen(){
 }
 
 function dkim_find(){
-    if [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         echo -e "\nType:\t" "TXT"
         echo -e "Host:\t" "default._domainkey.${DOMAIN}"
         echo -e "Value:\t" "v=DKIM1; k=rsa; p=${DKIM_KEY};"
-
-    else
-        echo "Sorry! It looks like ${DOMAIN} is missing a DKIM key. Try running this to create a DKIM key:" 
-        echo "Syntax: <dkim> -c [<domain>]"
-    fi
 }
 
 if (( $# == 0 )); then
