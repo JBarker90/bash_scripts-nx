@@ -25,18 +25,19 @@ function usage(){
 
 function dkim_gen(){
     if [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
-        echo "It appears ${DOMAIN} already has a DKIM key. Try running this to see the DNS values:" 
-        echo "Syntax: <dkim> -f [<domain>]"
+        dkim_find
         exit;
     else
-        if [[ $(hostname -s) == "cloudhost-"* ]]; then
-            sudo -u iworx ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
-        else
-            ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
-        fi
-        wait
+        echo "Generating DKIM Key"
+        echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain "$DOMAIN""
+        #if [[ $(hostname -s) == "cloudhost-"* ]]; then
+        #    sudo -u iworx ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
+        #else
+        #    ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
+        #fi
+        #wait
 
-        sudo cat -n /etc/domainkeys/"${DOMAIN}"/rsa.public
+        #sudo cat -n /etc/domainkeys/"${DOMAIN}"/rsa.public
     fi  
 }
 
