@@ -1,2 +1,76 @@
 #!/bin/bash
 
+DOMAIN=$2
+DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
+
+help(){
+    # Displays Help message
+    echo "This bash script can be used to check if a DKIM key exists for a domain and generate one if needed."
+    echo "It can also find the DKIM public key file and output the DKIM value in a DNS record format."
+    echo 
+    echo "Syntax: <dkim> [-h|c|f] [<domain>]"
+    echo "options:"
+    echo "-h    Print this Help message."
+    echo "-c    Create a DKIM Key for a specific domain."
+    echo "-f    Finds DKIM key on server and Formats it in DNS record values."
+}
+
+function usage(){
+    echo "Syntax: <dkim> [-h|c|f] [<domain>]"
+    echo "options:"
+    echo "-h    Print this Help message."
+    echo "-c    Create a DKIM Key for a specific domain."
+    echo "-f    Finds DKIM key on server and Formats it in DNS record values."
+}
+
+function dkim_gen(){
+    if [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
+        echo "It appears ${DOMAIN} already has a DKIM key. Try running this to see the DNS values:" 
+        echo "Syntax: <dkim> -f [<domain>]"
+        exit;
+    else
+        if [[ $(hostname -s) == "cloudhost-"* ]]; then
+            sudo -u iworx ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
+        else
+            ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
+        fi
+        wait
+
+        sudo cat -n /etc/domainkeys/"${DOMAIN}"/rsa.public
+    fi  
+}
+
+function dkim_find(){
+    if [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
+        echo -e "\nType:\t" "TXT"
+        echo -e "Host:\t" "default._domainkey.${DOMAIN}"
+        echo -e "Value:\t" "v=DKIM1; k=rsa; p=${DKIM_KEY};"
+
+    else
+        echo "Sorry! It looks like ${DOMAIN} is missing a DKIM key. Try running this to create a DKIM key:" 
+        echo "Syntax: <dkim> -c [<domain>]"
+    fi
+}
+
+if (( $# == 0 )); then
+    usage
+fi
+
+# Get options for script
+
+while getopts "hc:f:" option; do
+    case $option in
+        h) # Displays help message
+            help
+            exit;;
+        c) # Creates DKIM Key
+            dkim_gen
+            ;;
+        f) # Finds DKIM key and Formats in DNS value
+            dkim_find
+            ;;
+        \?) # If an option is given that doesn't exist
+            usage
+            exit;;
+    esac
+done
