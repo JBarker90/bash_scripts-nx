@@ -47,7 +47,7 @@ function dkim_find(){
         echo -e "Value:\t" "v=DKIM1; k=rsa; p=${DKIM_KEY};"
 }
 
-if (( $# == 0 )); then
+if [[ $# == 0 || "${#1}" -gt 2 ]]; then
     usage
 fi
 
