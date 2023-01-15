@@ -50,6 +50,7 @@ function dkim_find(){
 function dkim_force(){
     echo "Generating new DKIM Key"
     echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
+    dkim_find
     exit;
 }
 
