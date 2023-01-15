@@ -48,7 +48,7 @@ function dkim_find(){
 }
 
 function dkim_force(){
-    echo "Generating DKIM Key"
+    echo "Generating new DKIM Key"
     echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
     exit;
 }
@@ -67,8 +67,8 @@ while getopts "hc:f:" option; do
         c) # Creates DKIM Key
             dkim_gen
             ;;
-        f) # Finds DKIM key and Formats in DNS value
-            dkim_find
+        f) # Forces DKIM key to generate if it needs to be regenerated
+            dkim_force
             ;;
         \?) # If an option is given that doesn't exist
             usage
