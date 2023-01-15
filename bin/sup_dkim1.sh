@@ -48,7 +48,9 @@ function dkim_find(){
 }
 
 function dkim_force(){
-    echo ""
+    echo "Generating DKIM Key"
+    echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
+    exit;
 }
 
 if [[ $# == 0 || "${#1}" -gt 2 ]]; then
