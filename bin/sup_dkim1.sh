@@ -42,9 +42,13 @@ function dkim_gen(){
 }
 
 function dkim_find(){
-        echo -e "\nType:\t" "TXT"
-        echo -e "Host:\t" "default._domainkey.${DOMAIN}"
-        echo -e "Value:\t" "v=DKIM1; k=rsa; p=${DKIM_KEY};"
+    echo -e "\nType:\t" "TXT"
+    echo -e "Host:\t" "default._domainkey.${DOMAIN}"
+    echo -e "Value:\t" "v=DKIM1; k=rsa; p=${DKIM_KEY};"
+}
+
+function dkim_force(){
+    echo ""
 }
 
 if [[ $# == 0 || "${#1}" -gt 2 ]]; then
