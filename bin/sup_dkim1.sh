@@ -60,7 +60,7 @@ fi
 
 # Get options for script
 
-while getopts "hc:f" option; do
+while getopts "hc:f:" option; do
     case $option in
         h) # Displays help message
             help
