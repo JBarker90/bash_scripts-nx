@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DOMAIN=$2
-DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
+#DOMAIN=$2
+#DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
 
 help(){
     # Displays Help message
@@ -60,11 +60,14 @@ fi
 
 # Get options for script
 
-while getopts "hc:f:" option; do
+while getopts "hd:c:f:" option; do
     case $option in
         h) # Displays help message
             help
             exit;;
+        d) # Domain variable
+            DOMAIN="${OPTARG}"
+            ;;
         c) # Creates DKIM Key
             dkim_gen
             ;;
@@ -76,3 +79,5 @@ while getopts "hc:f:" option; do
             exit;;
     esac
 done
+
+DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
