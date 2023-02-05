@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#DOMAIN=$2
-#DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
+DOMAIN=$4
+DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
 
 help(){
     # Displays Help message
@@ -80,4 +80,3 @@ while getopts "hd:c:f:" option; do
     esac
 done
 
-DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
