@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOMAIN=$4
+DOMAIN=$3
 DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
 
 help(){
