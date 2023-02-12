@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #DOMAIN=$3
-DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
+#DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
 
 help(){
     # Displays Help message
@@ -70,6 +70,7 @@ while getopts "hd:cf" option; do
             ;;
         d) # Domain variable
             DOMAIN="${OPTARG}"
+            DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
             ;;
         c) # Creates DKIM Key
             dkim_gen
