@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOMAIN=$3
+#DOMAIN=$3
 DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
 
 help(){
@@ -84,3 +84,4 @@ while getopts "hcd:f" option; do
     esac
 done
 
+shift "$(( OPTIND - 1 ))"
