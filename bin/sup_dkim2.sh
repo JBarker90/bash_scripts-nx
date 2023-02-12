@@ -26,6 +26,7 @@ function usage(){
 }
 
 function dkim_gen(){
+    DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
     if [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         dkim_find
         exit;
@@ -70,7 +71,7 @@ while getopts "hd:cf" option; do
             ;;
         d) # Domain variable
             DOMAIN="${OPTARG}"
-            DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
+            #DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
             ;;
         c) # Creates DKIM Key
             dkim_gen
