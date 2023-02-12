@@ -84,4 +84,11 @@ while getopts "hcd:f" option; do
     esac
 done
 
+# This is for debugging to verify arguments
+echo "Number of args: ${#}"
+echo "All args: ${*}"
+echo "First arg: ${1}"
+echo "Second arg: ${2}"
+echo "Third arg: ${3}"
+
 shift "$(( OPTIND - 1 ))"
