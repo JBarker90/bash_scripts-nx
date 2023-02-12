@@ -26,7 +26,6 @@ function usage(){
 }
 
 function dkim_gen(){
-    DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
     if [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         dkim_find
         exit;
@@ -45,6 +44,7 @@ function dkim_gen(){
 }
 
 function dkim_find(){
+    DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
     echo -e "\nType:\t" "TXT"
     echo -e "Host:\t" "default._domainkey.${DOMAIN}"
     echo -e "Value:\t" "v=DKIM1; k=rsa; p=${DKIM_KEY};"
