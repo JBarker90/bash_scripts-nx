@@ -53,7 +53,7 @@ function dkim_force(){
     echo "Generating new DKIM Key"
     echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
     dkim_find
-    exit;
+    #exit;
 }
 
 if [[ $# == 0 || "${#1}" -gt 2 ]]; then
@@ -83,5 +83,7 @@ while getopts "hcd:f" option; do
             ;;
     esac
 done
+
+echo "Number of args: ${#}"
 
 shift "$(( OPTIND - 1 ))"
