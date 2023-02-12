@@ -62,7 +62,7 @@ fi
 
 # Get options for script
 
-while getopts "hcd:f" option; do
+while getopts "hcfd:" option; do
     case $option in
         h) # Displays help message
             help
@@ -71,11 +71,11 @@ while getopts "hcd:f" option; do
         c) # Creates DKIM Key
             dkim_gen
             ;;
-        d) # Domain variable
-            DOMAIN="${OPTARG}"
-            ;;
         f) # Forces DKIM key to generate if it needs to be regenerated
             dkim_force
+            ;;
+        d) # Domain variable
+            DOMAIN="${OPTARG}"
             ;;
         \?) # If an option is given that doesn't exist
             usage
