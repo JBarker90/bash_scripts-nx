@@ -29,6 +29,13 @@ function dkim_gen(){
     if [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         dkim_find
         exit;
+    
+    elif [[ "${dkim_force}" = 'true' ]]; then
+        echo "Generating new DKIM Key"
+        echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
+        dkim_find
+        exit;
+
     else
         echo "Generating DKIM Key"
         echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
@@ -50,12 +57,12 @@ function dkim_find(){
     echo -e "Value:\t" "v=DKIM1; k=rsa; p=${DKIM_KEY};"
 }
 
-function dkim_force(){
-    echo "Generating new DKIM Key"
-    echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
-    dkim_find
-    #exit;
-}
+#function dkim_force(){
+#    echo "Generating new DKIM Key"
+#    echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
+#    dkim_find
+#    #exit;
+#}
 
 if [[ $# == 0 || "${#1}" -gt 2 ]]; then
     usage
@@ -76,7 +83,7 @@ while getopts "hd:cf" option; do
             dkim_gen
             ;;
         f) # Forces DKIM key to generate if it needs to be regenerated
-            dkim_force
+            dkim_force='true'
             ;;
         \?) # If an option is given that doesn't exist
             usage
