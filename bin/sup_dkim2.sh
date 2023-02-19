@@ -28,7 +28,7 @@ function usage(){
 function dkim_gen(){
     if [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         echo "The domain $DOMAIN already has a DKIM Key."
-    elif [[ "$option" == "f" ]]; then
+    elif [[ "$option" == "f" ]] && [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         echo "Generating new DKIM Key"
         echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
     else
