@@ -26,7 +26,7 @@ function usage(){
 }
 
 function dkim_gen(){
-    if [[ "$option" == "f" ]] && [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
+    if [[ "$option" == "f" ]] || [[ "$option" == "cf" ]] || [[ "$option" == "fc" ]] && [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         echo "Generating new DKIM Key"
         echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
     elif [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
