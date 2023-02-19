@@ -30,12 +30,11 @@ function dkim_gen(){
         dkim_find
         exit;
     
-    elif [[ "${dkim_force}" = 'true' ]]; then
+    elif [[ "$option" == "f" ]]; then
         echo "Generating new DKIM Key"
         echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
         dkim_find
-        exit;
-
+        #exit;
     else
         echo "Generating DKIM Key"
         echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
@@ -83,7 +82,8 @@ while getopts "hd:cf" option; do
             dkim_gen
             ;;
         f) # Forces DKIM key to generate if it needs to be regenerated
-            dkim_force='true'
+            #dkim_force='true'
+            dkim_gen
             ;;
         \?) # If an option is given that doesn't exist
             usage
