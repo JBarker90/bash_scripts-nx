@@ -28,13 +28,12 @@ function usage(){
 function dkim_gen(){
     if [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         dkim_find
-        exit;
-    
-    elif [[ "$option" == "f" ]]; then
-        echo "Generating new DKIM Key"
-        echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
-        dkim_find
-        exit;
+        if [[ "$option" == "f" ]]; then
+            echo "Generating new DKIM Key"
+            echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
+            dkim_find
+            exit;
+        fi
     else
         echo "Generating DKIM Key"
         echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
