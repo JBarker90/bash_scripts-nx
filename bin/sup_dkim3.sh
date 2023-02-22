@@ -44,7 +44,7 @@ function dkim_gen(){
         #sudo cat -n /etc/domainkeys/"${DOMAIN}"/rsa.public
     fi 
     dkim_find
-    exit 1
+    #exit 1
 }
 
 function dkim_find(){
@@ -89,6 +89,10 @@ while getopts "hc:f:" option; do
     esac
 done
 
-echo "Number of args: ${#}"
+echo -e "\nNumber of args: ${#}"
+echo "All args: ${*}"
+echo "First arg: ${1}"
+echo "Second arg: ${2}"
+echo "Third arg: ${3}"
 
 shift "$(( OPTIND - 1 ))"
