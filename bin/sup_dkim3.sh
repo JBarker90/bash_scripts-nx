@@ -67,20 +67,19 @@ fi
 
 # Get options for script
 
-while getopts "hd:cf" option; do
+while getopts "hc:f:" option; do
     case $option in
         h) # Displays help message
             help
             exit 1
             ;;
-        d) # Domain variable
-            DOMAIN="${OPTARG}"
-            ;;
         c) # Creates DKIM Key
+            DOMAIN="${OPTARG}"
             dkim_gen
             ;;
         f) # Forces DKIM key to generate if it needs to be regenerated
             #dkim_force='true'
+            DOMAIN="${OPTARG}"
             dkim_gen
             ;;
         \?) # If an option is given that doesn't exist
