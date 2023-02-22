@@ -75,6 +75,10 @@ while getopts "hc:f:" option; do
             ;;
         c) # Creates DKIM Key
             DOMAIN="${OPTARG}"
+            if [[ "${DOMAIN}" == "-f" || "${DOMAIN}" == "-c" || "${DOMAIN}" == "c" || "${DOMAIN}" == "f" ]]; then
+                usage
+                exit 1
+            fi
             dkim_gen
             ;;
         f) # Forces DKIM key to generate if it needs to be regenerated
