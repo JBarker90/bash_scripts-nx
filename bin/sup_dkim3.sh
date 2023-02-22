@@ -63,6 +63,7 @@ function dkim_find(){
 
 if [[ $# == 0 || "${#1}" -gt 2 ]]; then
     usage
+    exit 1
 fi
 
 # Get options for script
@@ -75,7 +76,7 @@ while getopts "hc:f:" option; do
             ;;
         c) # Creates DKIM Key
             DOMAIN="${OPTARG}"
-            if [[ "${DOMAIN}" == "-f" || "${DOMAIN}" == "-c" || "${DOMAIN}" == "c" || "${DOMAIN}" == "f" ]]; then
+            if [[ "${DOMAIN}" == "-f" || "${DOMAIN}" == "-c" ]]; then
                 usage
                 exit 1
             fi
