@@ -52,13 +52,6 @@ function dkim_find(){
     echo -e "Value:\t" "v=DKIM1; k=rsa; p=${DKIM_KEY};"
 }
 
-#function dkim_force(){
-#    echo "Generating new DKIM Key"
-#    echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
-#    dkim_find
-#    #exit;
-#}
-
 if [[ $# == 0 || "${#1}" -gt 2 ]]; then
     usage
     exit 1
