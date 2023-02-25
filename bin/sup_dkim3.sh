@@ -76,6 +76,10 @@ while getopts "hc:f:" option; do
         f) # Forces DKIM key to generate if it needs to be regenerated
             #dkim_force='true'
             DOMAIN="${OPTARG}"
+            if [[ "${DOMAIN}" == "-f" || "${DOMAIN}" == "-c" ]]; then
+                usage
+                exit 1
+            fi
             dkim_gen
             ;;
         \?) # If an option is given that doesn't exist
