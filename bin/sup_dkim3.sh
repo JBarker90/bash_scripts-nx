@@ -13,6 +13,7 @@ help(){
     echo "-h    Print this Help message."
     echo "-c    Create a DKIM Key for a specific domain and formats it in DNS record values."
     echo "-f    Can be used to Force a new DKIM key to be generated."
+    echo
 }
 
 function usage(){
@@ -21,6 +22,7 @@ function usage(){
     echo "-h    Print this Help message."
     echo "-c    Create a DKIM Key for a specific domain and formats it in DNS record values."
     echo "-f    Can be used to Force a new DKIM key to be generated."
+    echo
 }
 
 function dkim_gen(){
