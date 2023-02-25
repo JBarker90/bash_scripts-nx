@@ -27,6 +27,14 @@ function dkim_gen(){
     if [[ "$option" == "f" ]] && [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         echo "Generating new DKIM Key"
         echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
+        #if [[ $(hostname -s) == "cloudhost-"* ]]; then
+        #    sudo -u iworx ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
+        #else
+        #    ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
+        #fi
+        #wait
+
+        #sudo cat -n /etc/domainkeys/"${DOMAIN}"/rsa.public
     elif [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         echo "The domain $DOMAIN already has a DKIM Key."
     else
@@ -74,7 +82,6 @@ while getopts "hc:f:" option; do
             dkim_gen
             ;;
         f) # Forces DKIM key to generate if it needs to be regenerated
-            #dkim_force='true'
             DOMAIN="${OPTARG}"
             if [[ "${DOMAIN}" == "-f" || "${DOMAIN}" == "-c" ]]; then
                 usage
