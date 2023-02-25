@@ -28,12 +28,11 @@ function usage(){
 function dkim_gen(){
     if [[ "$option" == "f" ]] && [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         echo "Generating new DKIM Key"
-        echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
-        #if [[ $(hostname -s) == "cloudhost-"* ]]; then
-        #    sudo -u iworx ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
-        #else
-        #    ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
-        #fi
+        if [[ $(hostname -s) == "cloudhost-"* ]]; then
+            echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
+        else
+            echo "~iworx/bin/domainkeys.pex --domain $DOMAIN"
+        fi
         #wait
 
         #sudo cat -n /etc/domainkeys/"${DOMAIN}"/rsa.public
@@ -41,12 +40,11 @@ function dkim_gen(){
         echo "The domain $DOMAIN already has a DKIM Key."
     else
         echo "Generating DKIM Key"
-        echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
-        #if [[ $(hostname -s) == "cloudhost-"* ]]; then
-        #    sudo -u iworx ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
-        #else
-        #    ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
-        #fi
+        if [[ $(hostname -s) == "cloudhost-"* ]]; then
+            echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
+        else
+            echo "~iworx/bin/domainkeys.pex --domain $DOMAIN"
+        fi
         #wait
 
         #sudo cat -n /etc/domainkeys/"${DOMAIN}"/rsa.public
