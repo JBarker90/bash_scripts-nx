@@ -8,7 +8,7 @@ help(){
     echo "This bash script can be used to check if a DKIM key exists for a domain and generate one if needed."
     echo "It can also find the DKIM public key file and output the DKIM value in a DNS record format."
     echo 
-    echo "Syntax: sup_dkim3.sh [-h|c|f] [<domain>]"
+    echo "Syntax: sup_dkim3.sh [-h|c|f] [domain]"
     echo "options:"
     echo "  -h    Print this Help message."
     echo "  -c    Create a DKIM Key for a specific domain and formats it in DNS record values."
@@ -17,7 +17,7 @@ help(){
 }
 
 usage(){
-    echo "Syntax: sup_dkim3.sh [-h|c|f] [<domain>]"
+    echo "Syntax: sup_dkim3.sh [-h|c|f] [domain]"
     echo "options:"
     echo "  -h    Print this Help message."
     echo "  -c    Create a DKIM Key for a specific domain and formats it in DNS record values."
