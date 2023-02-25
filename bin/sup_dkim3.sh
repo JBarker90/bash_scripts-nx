@@ -16,7 +16,7 @@ help(){
     echo
 }
 
-function usage(){
+usage(){
     echo "Syntax: sup_dkim3.sh [-h|c|f] [<domain>]"
     echo "options:"
     echo "-h    Print this Help message."
@@ -25,7 +25,7 @@ function usage(){
     echo
 }
 
-function dkim_gen(){
+dkim_gen(){
     if [[ "$option" == "f" ]] && [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         echo "Generating new DKIM Key"
         if [[ $(hostname -s) == "cloudhost-"* ]]; then
@@ -53,7 +53,7 @@ function dkim_gen(){
     #exit 1
 }
 
-function dkim_find(){
+dkim_find(){
     DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
     echo -e "\nType:\t" "TXT"
     echo -e "Host:\t" "default._domainkey.${DOMAIN}"
