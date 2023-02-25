@@ -10,18 +10,18 @@ help(){
     echo 
     echo "Syntax: sup_dkim3.sh [-h|c|f] [<domain>]"
     echo "options:"
-    echo "-h    Print this Help message."
-    echo "-c    Create a DKIM Key for a specific domain and formats it in DNS record values."
-    echo "-f    Can be used to Force a new DKIM key to be generated."
+    echo "  -h    Print this Help message."
+    echo "  -c    Create a DKIM Key for a specific domain and formats it in DNS record values."
+    echo "  -f    Can be used to Force a new DKIM key to be generated."
     echo
 }
 
 usage(){
     echo "Syntax: sup_dkim3.sh [-h|c|f] [<domain>]"
     echo "options:"
-    echo "-h    Print this Help message."
-    echo "-c    Create a DKIM Key for a specific domain and formats it in DNS record values."
-    echo "-f    Can be used to Force a new DKIM key to be generated."
+    echo "  -h    Print this Help message."
+    echo "  -c    Create a DKIM Key for a specific domain and formats it in DNS record values."
+    echo "  -f    Can be used to Force a new DKIM key to be generated."
     echo
 }
 
