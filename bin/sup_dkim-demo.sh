@@ -24,26 +24,28 @@ usage(){
 
 dkim_gen(){
     if [[ "$option" == "f" ]] && [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
-        echo "Generating new DKIM Key"
+        echo "Replacing the old DKIM Key..."
         if [[ $(hostname -s) == "cloudhost-"* ]]; then
             echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
         else
             echo "~iworx/bin/domainkeys.pex --domain $DOMAIN"
         fi
         #wait
-
+        echo "Done..."
+        
         #sudo cat -n /etc/domainkeys/"${DOMAIN}"/rsa.public
     elif [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         echo "The domain $DOMAIN already has a DKIM Key."
     else
-        echo "Generating DKIM Key"
+        echo "Generating a DKIM Key..."
         if [[ $(hostname -s) == "cloudhost-"* ]]; then
             echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain $DOMAIN"
         else
             echo "~iworx/bin/domainkeys.pex --domain $DOMAIN"
         fi
         #wait
-
+        echo "Done..."
+        
         #sudo cat -n /etc/domainkeys/"${DOMAIN}"/rsa.public
     fi 
     dkim_find
