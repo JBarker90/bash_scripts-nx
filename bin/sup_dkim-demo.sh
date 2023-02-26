@@ -32,8 +32,6 @@ dkim_gen(){
         fi
         wait
         echo "Done..."
-        
-        sudo cat -n /etc/domainkeys/"${DOMAIN}"/rsa.public
     elif [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         echo "The domain $DOMAIN already has a DKIM Key."
     else
@@ -45,8 +43,6 @@ dkim_gen(){
         fi
         wait
         echo "Done..."
-        
-        sudo cat -n /etc/domainkeys/"${DOMAIN}"/rsa.public
     fi 
     dkim_find
     exit 0
