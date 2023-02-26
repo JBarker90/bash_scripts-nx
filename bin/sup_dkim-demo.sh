@@ -93,10 +93,4 @@ while getopts "hc:f:" option; do
     esac
 done
 
-echo -e "\nNumber of args: ${#}"
-echo "All args: ${*}"
-echo "First arg: ${1}"
-echo "Second arg: ${2}"
-echo "Third arg: ${3}"
-
 shift "$(( OPTIND - 1 ))"
