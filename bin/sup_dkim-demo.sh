@@ -1,8 +1,5 @@
 #!/bin/bash
 
-#DOMAIN=$3
-#DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
-
 help(){
     # Displays Help message
     echo "This bash script can be used to check if a DKIM key exists for a domain and generate one if needed."
