@@ -47,7 +47,7 @@ dkim_gen(){
         #sudo cat -n /etc/domainkeys/"${DOMAIN}"/rsa.public
     fi 
     dkim_find
-    #exit 0
+    exit 0
 }
 
 dkim_find(){
