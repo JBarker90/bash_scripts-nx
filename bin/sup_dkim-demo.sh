@@ -30,7 +30,7 @@ dkim_gen(){
         else
             echo "~iworx/bin/domainkeys.pex --domain $DOMAIN"
         fi
-        #wait
+        wait
         echo "Done..."
         
         #sudo cat -n /etc/domainkeys/"${DOMAIN}"/rsa.public
@@ -43,7 +43,7 @@ dkim_gen(){
         else
             echo "~iworx/bin/domainkeys.pex --domain $DOMAIN"
         fi
-        #wait
+        wait
         echo "Done..."
         
         #sudo cat -n /etc/domainkeys/"${DOMAIN}"/rsa.public
