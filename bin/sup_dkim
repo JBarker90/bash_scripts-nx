@@ -1,6 +1,5 @@
 #!/bin/bash
 sup_dkim (){
-
     help(){
         # Displays Help message
         echo "This bash script can be used to check if a DKIM key exists for a domain and generate one if needed."
