@@ -51,6 +51,7 @@ dkim_gen(){
 dkim_find(){
     DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
     echo -e "\nType:\t" "TXT"
+    echo -e "TTL:\t" "1800"
     echo -e "Host:\t" "default._domainkey.${DOMAIN}"
     echo -e "Value:\t" "v=DKIM1; k=rsa; p=${DKIM_KEY};"
 }
