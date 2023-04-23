@@ -35,14 +35,18 @@ dkim_gen(){
     elif [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         echo "The domain $DOMAIN already has a DKIM Key."
     else
-        echo "Generating a DKIM Key..."
-        if [[ $(hostname -s) == "cloudhost-"* ]]; then
-            echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain '$DOMAIN'"
+        if [[ -L "/etc/domainkeys/${DOMAIN}" ]]; then
+            echo "Something"
         else
-            echo "~iworx/bin/domainkeys.pex --domain '$DOMAIN'"
+            echo "Generating a DKIM Key..."
+            if [[ $(hostname -s) == "cloudhost-"* ]]; then
+                echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain '$DOMAIN'"
+            else
+                echo "~iworx/bin/domainkeys.pex --domain '$DOMAIN'"
+            fi
+            wait
+            echo "Done..."
         fi
-        wait
-        echo "Done..."
     fi 
     dkim_find
     exit 0
