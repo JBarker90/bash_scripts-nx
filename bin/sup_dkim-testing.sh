@@ -26,9 +26,9 @@ dkim_gen(){
     if [[ "$option" == "f" ]] && [[ -e "/etc/domainkeys/${DOMAIN}/rsa.public" ]]; then
         echo "Replacing the old DKIM Key..."
         if [[ $(hostname -s) == "cloudhost-"* ]]; then
-            sudo -u iworx ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
+            echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain '$DOMAIN'"
         else
-            ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
+            echo "~iworx/bin/domainkeys.pex --domain '$DOMAIN'"
         fi
         wait
         echo "Done..."
