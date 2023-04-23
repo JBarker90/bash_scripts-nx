@@ -37,9 +37,9 @@ dkim_gen(){
     else
         echo "Generating a DKIM Key..."
         if [[ $(hostname -s) == "cloudhost-"* ]]; then
-            sudo -u iworx ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
+            echo "sudo -u iworx ~iworx/bin/domainkeys.pex --domain '$DOMAIN'"
         else
-            ~iworx/bin/domainkeys.pex --domain "$DOMAIN"
+            echo "~iworx/bin/domainkeys.pex --domain '$DOMAIN'"
         fi
         wait
         echo "Done..."
