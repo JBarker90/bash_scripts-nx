@@ -1,0 +1,3 @@
+# This will show all docroots on the server
+
+grep -hE ' +DocumentRoot' /etc/httpd/conf.d/vhost_*.conf | grep -v '/var/www/html' | sort | uniq | awk '{print $2}'
