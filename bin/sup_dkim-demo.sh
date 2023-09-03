@@ -54,8 +54,8 @@ dkim_find(){
     echo -e "\nType:\t" "TXT"
     echo -e "TTL:\t" "1800"
     echo -e "Host:\t" "default._domainkey.${DOMAIN}"
-    echo -e "NX DNS Value:\t" "${NX_DKIM_KEY}"
-    echo -e "Remote DNS Value:\t" "${DKIM_KEY}"
+    echo -e "NX Value:\t" "v=DKIM1; k=rsa; p=${NX_DKIM_KEY};"
+    echo -e "Remote Value:\t" "${DKIM_KEY}"
 }
 
 if [[ $# == 0 || "${#1}" -gt 2 ]]; then
