@@ -1,0 +1,21 @@
+#!/bin/bash
+
+_TMP=$(ps aux | grep '[/]tmp/.find' | awk '{print $2 " " $NF}');
+    if [[ -z $_TMP ]]; then
+        echo "Unable to Locate Maldet Process";
+        return 0;
+    else
+        ps aux | grep --color=auto '[/]tmp/.find' | awk '{print $2 " " $NF}' | while IFS= read -r line; do
+            _PID=$(echo  $line | awk '{print $1}');
+            _FIL=$(echo $line | awk '{print $2}');
+            _FILE=$(strace -p ${_PID} -fs2000 2>&1 | grep -Em1 '^open' | awk -F'"' '{print $2}'| sed -r 's/\/chroot//g');
+            _LINE=$(grep -n "$_FILE" "$_FIL" | awk -F: '{print $1}');
+            _TOT=$(wc -l $_FIL|awk '{print $1}');
+            echo "Process ID:" $_PID;
+            ((BIG=_LINE*100));
+            ((PERCENT=BIG/_TOT));
+            printf 'Scan is on file: %s\n' "$( echo $_FILE  )";
+            printf 'Which is file number %s of %s and we are %s%% done\n' "$_LINE" "$_TOT" "$PERCENT";
+            echo '';
+        done;
+    fi
