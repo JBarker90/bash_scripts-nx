@@ -51,11 +51,17 @@ dkim_gen(){
 dkim_find(){
     NX_DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n')
     DKIM_KEY=$(sudo grep -v -- ^- /etc/domainkeys/"${DOMAIN}"/rsa.public 2>/dev/null | tr -d '\n' | awk '{print "v=DKIM1; k=rsa; p="$0";"}' | sed -e 's/.*/"&"/; s/.\{255\}/&"\n"/g' | tr -d '\n' | sed -e 's/""/" "/g')
+    echo -e "\nNX Global DNS:"
     echo -e "\nType:\t" "TXT"
     echo -e "TTL:\t" "1800"
     echo -e "Host:\t" "default._domainkey.${DOMAIN}"
-    echo -e "NX Value:\t" "v=DKIM1; k=rsa; p=${NX_DKIM_KEY};"
-    echo -e "Remote Value:\t" "${DKIM_KEY}"
+    echo -e "Value:\t" "v=DKIM1; k=rsa; p=${NX_DKIM_KEY};"
+    
+    echo -e "\nSplit 255 Characters:"
+    echo -e "\nType:\t" "TXT"
+    echo -e "TTL:\t" "1800"
+    echo -e "Host:\t" "default._domainkey.${DOMAIN}"
+    echo -e "Value:\t" "${DKIM_KEY}"
 }
 
 if [[ $# == 0 || "${#1}" -gt 2 ]]; then
