@@ -10,3 +10,5 @@ if [ -L "/Users/jbarker/$DOMAIN" ]; then
 else
   echo "Symbolic link does not exist"
 fi
+
+rm "$tmp"
