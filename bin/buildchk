@@ -1,0 +1,6 @@
+#!/bin/bash
+
+curl -s -O https://inventory.nexcess.net/scripts/buildchk.sh>/dev/null
+chmod +x buildchk.sh
+./buildchk.sh
+rm buildchk.sh
