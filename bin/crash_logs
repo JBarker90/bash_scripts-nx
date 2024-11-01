@@ -1,36 +1,37 @@
 #! /bin/bash
 
-    lines=10;
-    if [[ -n $1 ]]; then
-        lines=$1;
-    fi;
-    for i in $( ls -1td /var/crash/*/vmcore-dmesg.txt );
-    do
-        printf "\x1B[0;34;3m$i\x1B[0m\n";
-        sed -n '/oom_score_adj name/,/Kernel panic -/p' "$i" | tail -n+2 | head -n-1 | tr -d '[]' | perl -pe 's,<6>,,' | awk -v totmem="$( vmstat -s | awk '/total memory/{ print $1 }' )" '
-            BEGIN{
-              red         = "\x1B[0;31;5m";
-              green       = "\x1B[0;32;5m";
-              yellow      = "\x1B[0;33m";
-              blue        = "\x1B[1;34;3m";
-              white       = "\x1B[0;37m";
-              reset       = "\x1B[0m";
-              warningth   = totmem/(5*1024);
-              criticalth  = totmem/(3*1024);
-            }
-            { x=$2" "$NF;
-              b[$2"_"$NF] += $4;
-              a[$2"_"$NF] += $5;
-              c[$2"_"$NF] += 1
-            }
-            END {
-              for(i in a){
-                n=index( i, "_" );
-                colour_a = a[i]/1024 < warningth ? white : ( a[i]/1024 >= criticalth ? red : yellow )
-                colour_b = b[i]/1024 < warningth ? white : ( b[i]/1024 >= criticalth ? red : yellow )
-                printf ":: %10s :: %-20s :: %5d ::%s ~%10.2fM~ %s::%s ~%10.2fM~ %s::\n",substr( i,1,n-1 ),substr( i,n+1 ),c[i],colour_a,a[i]/1024,reset,colour_b,b[i]/1024,reset
-              }
-            }
-          ' | sort -t'~' -rhk2 | tr -d '~' | head -n $lines;
-        echo;
-    done
+files=$(ls -1td /var/crash/*/vmcore-dmesg.txt)
+lines=10
+if [[ -n $1 ]]; then
+    lines=$1;
+fi;
+for i in $files;
+do
+    printf "\x1B[0;34;3m%s\x1B[0m\n" "$i";
+    sed -n '/oom_score_adj name/,/Kernel panic -/p' "$i" | tail -n+2 | head -n-1 | tr -d '[]' | perl -pe 's,<6>,,' | awk -v totmem="$( vmstat -s | awk '/total memory/{ print $1 }' )" '
+        BEGIN{
+          red         = "\x1B[0;31;5m";
+          green       = "\x1B[0;32;5m";
+          yellow      = "\x1B[0;33m";
+          blue        = "\x1B[1;34;3m";
+          white       = "\x1B[0;37m";
+          reset       = "\x1B[0m";
+          warningth   = totmem/(5*1024);
+          criticalth  = totmem/(3*1024);
+        }
+        { x=$2" "$NF;
+          b[$2"_"$NF] += $4;
+          a[$2"_"$NF] += $5;
+          c[$2"_"$NF] += 1
+        }
+        END {
+          for(i in a){
+            n=index( i, "_" );
+            colour_a = a[i]/1024 < warningth ? white : ( a[i]/1024 >= criticalth ? red : yellow )
+            colour_b = b[i]/1024 < warningth ? white : ( b[i]/1024 >= criticalth ? red : yellow )
+            printf ":: %10s :: %-20s :: %5d ::%s ~%10.2fM~ %s::%s ~%10.2fM~ %s::\n",substr( i,1,n-1 ),substr( i,n+1 ),c[i],colour_a,a[i]/1024,reset,colour_b,b[i]/1024,reset
+          }
+        }
+      ' | sort -t'~' -rhk2 | tr -d '~' | head -n "$lines";
+    echo;
+done
