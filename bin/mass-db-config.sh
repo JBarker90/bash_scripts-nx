@@ -4,7 +4,7 @@
 readonly ARGA=("$@")
 
 # Script version
-_VERSION="1.0.0"
+_VERSION="1.2.0"
 
 # Explicitly set path to be safe
 PATH="/bin:/usr/bin:/usr/local/sbin:/sbin:/usr/sbin"
@@ -97,24 +97,28 @@ _db_config(){
       echo "The Database Name is the same. Skipping this configuration."
     else
       sed -i "s/\(define( 'DB_NAME', '\)[^']\+'/\1$_DEST_DB_NAME'/" "${_PATH}"
+      echo "The Database Name has updated to $_DEST_DB_NAME"
     fi
 
     if [[ "$_DEST_DB_USER" == "$_SOURCE_DB_USER" ]]; then
       echo "The Database User is the same. Skipping this configuration."
     else
       sed -i "s/\(define( 'DB_USER', '\)[^']\+'/\1$_DEST_DB_USER'/" "${_PATH}"
+      echo "The Database User has updated to $_DEST_DB_USER"
     fi
 
     if [[ "$_DEST_DB_PASS" == "$_SOURCE_DB_PASS" ]]; then
       echo "The Database Password is the same. Skipping this configuration."
     else
       sed -i "s/\(define( 'DB_PASSWORD', '\)[^']\+'/\1$_DEST_DB_PASS'/" "${_PATH}"
+      echo "The Database Password has updated to $_DEST_DB_PASS"
     fi
 
     if [[ "$_DEST_DB_HOST" == "$_SOURCE_DB_HOST" ]]; then
       echo "The Database Host is the same. Skipping this configuration."
     else
       sed -i "s/\(define( 'DB_HOST', '\)[^']\+'/\1$_DEST_DB_HOST'/" "${_PATH}"
+      echo "The Database Host has updated to $_DEST_DB_HOST"
     fi
   done < <(cat "${CONFIG_LIST_NAME}")
 
@@ -241,9 +245,14 @@ _prereq() {
 # Main
 main() {
 
+  if [[ "$#" -lt 1 ]]; then
+    _usage
+    exit 0
+  fi
+
   _prereq "${ARGA[@]}"
 
 }
 
-main
+main "$@"
 
