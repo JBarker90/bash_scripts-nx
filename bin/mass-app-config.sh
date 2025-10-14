@@ -4,7 +4,7 @@
 readonly ARGA=("$@")
 
 # Script version
-_VERSION="1.0.0"
+_VERSION="2.0.0"
 
 # Explicitly set path to be safe
 PATH="/bin:/usr/bin:/usr/local/sbin:/sbin:/usr/sbin"
@@ -29,6 +29,7 @@ _usage() {
 		-p|--db-password <pass>         Password for database user.
 		-c|--db-config                  Updates DB creds in app config file.
 		-r|--redis-config               Configures Redis plugin and updates app config file.
+		-D|--delete-redis-config        Removes Redis config block from app config file.
 		-h|--help                       Show this menu.
 		-v|--version                    Show script version information.
 	EOF
@@ -60,6 +61,9 @@ _cmdline() {
         ;;
       "--redis-config"|"-r")
         args="${args}-r "
+        ;;
+      "--delete-redis-config"|"-D")
+        args="${args}-D "
         ;;
       "--help"|"-h")
         args="${args}-h "
@@ -130,77 +134,85 @@ _db_config(){
   fi
 }
 
+_HA_CONFIG_CODE(){
+cat << EOF
+# Redis Object Cache Pro - ESG Projects
+define( 'WP_REDIS_CONFIG', [
+	'token' => '$_OCP_TOKEN',
+	'servers' => [
+			'tcp://$_REDIS_HA_PREFIX.$_REDIS_INSTANCE:$_REDIS_PORT?role=master',
+			'tcp://127.0.0.1:$_REDIS_PORT?role=replica',
+	],
+	'replication_strategy' => 'distribute_replicas',
+	'database' => '$_REDIS_DB',
+	'maxttl' => 3600 * 12, // 12 hours
+	'timeout' => 2.5,
+	'read_timeout' => 2.5,
+	'retry_interval' => 10,
+	'retries' => 2,
+	'backoff' => 'smart',
+	'compression' => 'zstd',
+	'serializer' => 'igbinary',
+	'async_flush' => true,
+	'split_alloptions' => true,
+	'prefetch' => true,
+	'debug' => false,
+	'save_commands' => false,
+	'non_persistent_groups' => [
+			'ywpar_points',
+			'wp-all-import-pro',
+		],
+] );
+define( 'WP_REDIS_DISABLED', false );
+EOF
+}
+
+_CONFIG_CODE(){
+cat << EOF
+# Redis Object Cache Pro - ESG Projects
+define( 'WP_REDIS_CONFIG', [
+  'token' => '$_OCP_TOKEN',
+  'host' => '$_REDIS_HOST',
+  'port' => '$_REDIS_PORT',
+  'database' => '$_REDIS_DB',
+  'maxttl' => 86400 * 7,
+  'timeout' => 1.0,
+  'read_timeout' => 1.0,
+  'retry_interval' => 10,
+  'retries' => 3,
+  'backoff' => 'smart',
+  'compression' => 'zstd',
+  'serializer' => 'igbinary',
+  'async_flush' => true,
+  'split_alloptions' => true,
+  'prefetch' => true,
+  'debug' => false,
+  'save_commands' => false,
+  'non_persistent_groups' => [
+      'ywpar_points',
+  ],
+] );
+define( 'WP_REDIS_DISABLED', false );
+EOF
+}
+
 _redis_config(){
   local _DOC_ROOT _OCP_CODE_BLOCK _OCP_HA_CODE_BLOCK _REDIS_DB _REDIS_PORT _REDIS_HOST _OCP_TOKEN _REDIS_INSTANCE _REDIS_HA_PREFIX
+	local TARGET_PATTERN="That's all, stop editing!"
+	local TARGET_LINE="/* That's all, stop editing! Happy publishing. */"
 
   _REDIS_DB=0
 
   if [[ -e "${CONFIG_LIST_NAME}" ]]; then
   while read -r _PATH; do 
-  _DOC_ROOT=$(echo "$_PATH" | cut -d '/' -f-5)
-  _OCP_TOKEN=""
-  _OCP_HA_CODE_BLOCK="
-  # Redis Object Cache Pro - ESG Projects
-  define( 'WP_REDIS_CONFIG', [
-    'token' => '$_OCP_TOKEN',
-    'servers' => [
-        'tcp://$_REDIS_HA_PREFIX.$_REDIS_INSTANCE:$_REDIS_PORT?role=master',
-        'tcp://127.0.0.1:$_REDIS_PORT?role=replica',
-    ],
-    'replication_strategy' => 'distribute_replicas',
-    'database' => '$_REDIS_DB',
-    'maxttl' => 3600 * 12, // 12 hours
-    'timeout' => 2.5,
-    'read_timeout' => 2.5,
-    'retry_interval' => 10,
-    'retries' => 2,
-    'backoff' => 'smart',
-    'compression' => 'zstd',
-    'serializer' => 'igbinary',
-    'async_flush' => true,
-    'split_alloptions' => true,
-    'prefetch' => true,
-    'debug' => false,
-    'save_commands' => false,
-    'non_persistent_groups' => [
-        'ywpar_points',
-        'wp-all-import-pro',
-      ],
-  ] );
-  define( 'WP_REDIS_DISABLED', false );
-  "
-  _OCP_CODE_BLOCK="
-  # Redis Object Cache Pro - ESG Projects
-  define( 'WP_REDIS_CONFIG', [
-    'token' => '$_OCP_TOKEN',
-    'host' => '$_REDIS_HOST',
-    'port' => '$_REDIS_PORT',
-    'database' => '$_REDIS_DB',
-    'maxttl' => 86400 * 7,
-    'timeout' => 1.0,
-    'read_timeout' => 1.0,
-    'retry_interval' => 10,
-    'retries' => 3,
-    'backoff' => 'smart',
-    'compression' => 'zstd',
-    'serializer' => 'igbinary',
-    'async_flush' => true,
-    'split_alloptions' => true,
-    'prefetch' => true,
-    'debug' => false,
-    'save_commands' => false,
-    'non_persistent_groups' => [
-        'ywpar_points',
-    ],
-  ] );
-  define( 'WP_REDIS_DISABLED', false );
-  "
+  _DOC_ROOT=$(echo "$_PATH" | sed 's/\/[^/]*$//')
+  _OCP_TOKEN="c071ef057aaabcbebfea21eb37196713e844c15064fdc5521239956eab71"
 
     echo -e "\nBeginning Redis configuration for $_DOC_ROOT"
     cd "$_DOC_ROOT" || exit
 
     if [[ "$UID" != 0 ]]; then
-      echo "You need to be root to run this script"
+    	echo "You need to be root to run this script"
       exit 1
     else
       if ! [[ -f "${_PATH}_$(date '+%F')" ]]; then
@@ -212,33 +224,78 @@ _redis_config(){
       echo "Installing Object Cache Pro plugin for $_PATH"
       sudo -iu "$UNIX_USER" bash -c "/usr/local/bin/wp --path=\"$(pwd -P)\" plugin install https://a365f64bd6.nxcli.net/wp-content/plugins/object-cache-pro.zip --force"
 
+      if ! grep -q "${TARGET_PATTERN}" "${_PATH}"; then
+          echo "ERROR: Target line \"${TARGET_LINE}\" not found in ${_PATH}. Skipping insertion."
+          continue
+      fi
+
       case "${IS_REDIS_SOCK}" in 
         0)
           if [[ "${IS_CLUSTER}" = 1 ]]; then
-            _REDIS_INSTANCE=$(nkredis info "$UNIX_USER" | grep ' ID' | awk '{print $4}' | cut -d '-' -f-2)
-            _REDIS_HA_PREFIX=$(hostname | cut -d '-' -f1 | sed 's/$/-ha/g')
-            _REDIS_PORT=$(nkredis info "$UNIX_USER" | grep 'TCP Sockets' | awk '{print $4}' | cut -d ':' -f2)
-            echo -e "$_OCP_HA_CODE_BLOCK" >> "${_PATH}"
+						if ! grep -q "WP_REDIS_CONFIG" "${_PATH}";then
+							_REDIS_INSTANCE=$(/usr/nexkit/bin/nkredis info "$UNIX_USER" | grep ' ID' | awk '{print $4}' | cut -d '-' -f-2)
+							_REDIS_HA_PREFIX=$(hostname | cut -d '-' -f1 | sed 's/$/-ha/g')
+							_REDIS_PORT=$(/usr/nexkit/bin/nkredis info "$UNIX_USER" | grep 'TCP Sockets' | awk '{print $4}' | cut -d ':' -f2)
+							_HA_CONFIG_CODE | sed -i.tmp "\|${TARGET_PATTERN}|r /dev/stdin" "${_PATH}"
+							rm -f "${_PATH}.tmp"
+						fi
+            
           else
-            _REDIS_HOST=$(nkredis info "$UNIX_USER" | grep 'TCP ' | awk '{print $4}' | cut -d ':' -f1)
-            _REDIS_PORT=$(nkredis info "$UNIX_USER" | grep 'TCP ' | awk '{print $4}' | cut -d ':' -f2)
-            echo -e "$_OCP_CODE_BLOCK" >> "${_PATH}"
+						if ! grep -q "WP_REDIS_CONFIG" "${_PATH}";then
+							_REDIS_HOST=$(/usr/nexkit/bin/nkredis info "$UNIX_USER" | grep 'TCP ' | awk '{print $4}' | cut -d ':' -f1)
+							_REDIS_PORT=$(/usr/nexkit/bin/nkredis info "$UNIX_USER" | grep 'TCP ' | awk '{print $4}' | cut -d ':' -f2)
+							_CONFIG_CODE | sed -i.tmp "\|${TARGET_PATTERN}|r /dev/stdin" "${_PATH}"
+							rm -f "${_PATH}.tmp"
+						fi
+
           fi
           ;;
         1)
-          _REDIS_HOST=$(nkredis info "$UNIX_USER" | grep 'Unix ' | awk '{print $4}')
-          _REDIS_PORT=0
-          echo -e "$_OCP_CODE_BLOCK" >> "${_PATH}"
+					if ! grep -q "WP_REDIS_CONFIG" "${_PATH}";then
+						_REDIS_HOST=$(/usr/nexkit/bin/nkredis info "$UNIX_USER" | grep 'Unix ' | awk '{print $4}')
+						_REDIS_PORT=0
+						_CONFIG_CODE | sed -i.tmp "\|${TARGET_PATTERN}\|r /dev/stdin" "${_PATH}"
+						rm -f "${_PATH}.tmp"
+					fi
           ;;
       esac
       sudo -iu "$UNIX_USER" bash -c "/usr/local/bin/wp --path=\"$(pwd -P)\" plugin activate object-cache-pro"
-      sudo -iu "$UNIX_USER" bash -c "/usr/local/bin/wp --path=\"$(pwd -P)\" enable --force"
+      sudo -iu "$UNIX_USER" bash -c "/usr/local/bin/wp --path=\"$(pwd -P)\" redis enable --force"
       sudo -iu "$UNIX_USER" bash -c "/usr/local/bin/wp --path=\"$(pwd -P)\" cache flush"
     fi
     _REDIS_DB=$((_REDIS_DB + 1))
 
   done < <(cat "${CONFIG_LIST_NAME}")
   fi
+}
+
+_remove_redis_config(){
+	echo -e "\nStarting Redis configuration removal from files in ${CONFIG_LIST_NAME}..."
+
+	if [[ ! -e "${CONFIG_LIST_NAME}" ]]; then
+		echo "Error: Config list file ${CONFIG_LIST_NAME} not found."
+		return 1
+	fi
+
+	while read -r _PATH; do
+    echo "Processing ${_PATH}..."
+
+    if ! grep -q "# Redis Object Cache Pro - ESG Projects" "${_PATH}"; then
+      echo "Redis configuration block not found in ${_PATH}. Skipping."
+      continue
+    fi
+
+    sed -i.tmp '/# Redis Object Cache Pro - ESG Projects/,/define( '\''WP_REDIS_DISABLED'\'', false );/d' "${_PATH}"
+
+    if [ $? -eq 0 ]; then
+      echo "Successfully removed Redis configuration block from ${_PATH}."
+      rm -f "${_PATH}.tmp"
+    else
+      echo "Error: Failed to remove Redis configuration from ${_PATH}."
+      echo "   Check ${_PATH}.tmp for the original file."
+    fi
+
+  done < <(cat "${CONFIG_LIST_NAME}")
 }
 
 cluster_set(){
@@ -305,7 +362,7 @@ _prereq() {
 
   mapfile -t cmdline < <(_cmdline | tr ' ' '\n')
 
-  while getopts ":hvl:U:u:p:cr" OPTION "${cmdline[@]}"; do
+  while getopts ":hvl:U:u:p:crD" OPTION "${cmdline[@]}"; do
 
     case "${OPTION}" in
       h)
@@ -350,6 +407,10 @@ _prereq() {
         ;;
       r)
         _redis_config
+        exit 0
+        ;;
+      D)
+        _remove_redis_config
         exit 0
         ;;
       v)
