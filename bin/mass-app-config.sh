@@ -206,7 +206,7 @@ _redis_config(){
   if [[ -e "${CONFIG_LIST_NAME}" ]]; then
   while read -r _PATH; do 
   _DOC_ROOT=$(echo "$_PATH" | sed 's/\/[^/]*$//')
-  _OCP_TOKEN="c071ef057aaabcbebfea21eb37196713e844c15064fdc5521239956eab71"
+  _OCP_TOKEN=""
 
     echo -e "\nBeginning Redis configuration for $_DOC_ROOT"
     cd "$_DOC_ROOT" || exit
