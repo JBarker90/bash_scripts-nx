@@ -1,0 +1,102 @@
+
+#!/bin/bash
+
+# Script Arguments
+readonly ARGA=("$@")
+
+# Necessary Global Variables
+UNIX_USER=""
+
+# Print usage
+_usage() {
+
+  cat <<- EOF
+		$(basename "$0") <options>
+
+		Options:
+		-u|--unix-user <user>           Unix user. This is the will be the Siteworx user.
+		-h|--help                       Show this menu.
+	EOF
+
+}
+
+# Convert long command line options into short ones for getopts
+_cmdline() {
+
+  local x
+
+  for x in "${ARGA[@]}"; do
+
+    case "${x}" in
+      "--unix-user"|"-U")
+        args="${args}-U "
+        ;;
+      "--help"|"-h")
+        args="${args}-h "
+        ;;
+      "--"*)
+        echo "${x} is not a supported option." >&2
+        ;;
+      *)
+        args="${args}${x} "
+        ;;
+    esac
+  done
+
+  echo "${args}"
+
+}
+
+_memcalc() {
+memlist=$(ps aux | grep '${UNIX_USER}_conf' | grep -v grep | awk '{print $2}' | while read line; do ps -p $line -o rss=; done) &&
+memcount=$(echo -e "$memlist" | wc -l) &&
+memavg=$(echo -e "$memlist" | awk -v count=$memcount '{sum=$1+sum} END {print sum/count/1000}') &&
+
+echo "$(hostname) : Found $memcount php-fpm processes with an average of $memavg MB of memory used per process"
+
+}
+
+# Prerequisite checks
+_prereq() {
+
+  local -a cmdline
+
+  mapfile -t cmdline < <(_cmdline | tr ' ' '\n')
+
+  while getopts ":h:u:" OPTION "${cmdline[@]}"; do
+
+    case "${OPTION}" in
+      h)
+        _usage
+        exit 0
+        ;;
+      u)
+        if [[ -n "${OPTARG}" ]]; then
+          UNIX_USER="${OPTARG}"
+        else
+          echo "No Siteworx user is provided."
+          exit 1
+        fi
+        ;;
+      "?")
+        echo "-${OPTARG} is not a supported option." >&2
+        ;;
+      *);;
+    esac
+  done
+
+}
+
+# Main
+main() {
+
+  if [[ "$#" -lt 1 ]]; then
+    _usage
+    exit 0
+  fi
+
+  _prereq "${ARGA[@]}"
+  _memcalc
+}
+
+main "$@"
