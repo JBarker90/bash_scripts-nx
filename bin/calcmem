@@ -48,7 +48,7 @@ _cmdline() {
 }
 
 _memcalc() {
-memlist=$(ps aux | grep '${UNIX_USER}_conf' | grep -v grep | awk '{print $2}' | while read line; do ps -p $line -o rss=; done) &&
+memlist=$(ps aux | grep "$UNIX_USER"_conf | grep -v grep | awk '{print $2}' | while read line; do ps -p $line -o rss=; done) &&
 memcount=$(echo -e "$memlist" | wc -l) &&
 memavg=$(echo -e "$memlist" | awk -v count=$memcount '{sum=$1+sum} END {print sum/count/1000}') &&
 
