@@ -6,7 +6,7 @@ readonly ARGA=("$@")
 # Necessary Variables
 UNIX_USER=""
 DB_DIRECTORY=""
-DB_NAME_LIST="'$UNIX_USER'_db-list.txt"
+DB_NAME_LIST="db-list.txt"
 
 # Print usage
 _usage() {
