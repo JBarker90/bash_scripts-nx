@@ -6,7 +6,7 @@ readonly ARGA=("$@")
 # Necessary Variables
 UNIX_USER=""
 DB_DIRECTORY=""
-DB_NAME_LIST="${UNIX_USER}_db-list.txt"
+DB_NAME_LIST="'$UNIX_USER'_db-list.txt"
 
 # Print usage
 _usage() {
@@ -99,14 +99,14 @@ _export(){
   if [[ -e "${_SRC_DB_LIST}" ]]; then
       _SRC_DBS=$(/usr/bin/cat "$_SRC_DB_LIST")
       for DB in $_SRC_DBS; do
-        echo -e "\nDumping $DB to $_DB_ARCHIVE/$DB-$(/usr/bin/date '+%F').sql.gz"
-
         _DB_ARCHIVE="/home/${UNIX_USER}/migration_data/database_archives/db-backups-$(/usr/bin/date '+%F')"
         if ! [[ -d "${_DB_ARCHIVE}" ]]; then
           echo -e "\nCreating $_DB_ARCHIVE..."
           /usr/bin/mkdir -p "${_DB_ARCHIVE}"
+					echo -e "\nDumping $DB to $_DB_ARCHIVE/$DB-$(/usr/bin/date '+%F').sql.gz"
           /usr/bin/mysqldump --opt --quick --routines --skip-triggers --skip-lock-tables --no-tablespaces -u "$_DEST_DB_USER" -p"$_DEST_DB_PASS" "$DB" | /usr/bin/gzip -c > "$_DB_ARCHIVE"/"$DB"-"$(/usr/bin/date '+%F')".sql.gz &
         else
+					echo -e "\nDumping $DB to $_DB_ARCHIVE/$DB-$(/usr/bin/date '+%F').sql.gz"
           /usr/bin/mysqldump --opt --quick --routines --skip-triggers --skip-lock-tables --no-tablespaces -u "$_DEST_DB_USER" -p"$_DEST_DB_PASS" "$DB" | /usr/bin/gzip -c > "$_DB_ARCHIVE"/"$DB"-"$(/usr/bin/date '+%F')".sql.gz &
         fi
       done
@@ -123,7 +123,7 @@ _import(){
   if [[ -d $DB_FILES ]]; then
       for filename in "$DB_FILES"/*; do
         _SOURCE_DB_USER=$(echo "$filename" | /bin/cut -d '/' -f7 | cut -d '_' -f1)
-        db_name=$(echo "$filename" | /bin/cut -d '/' -f7 | /usr/bin/awk -v s="$_SOURCE_DB_USER" -F '[_.-]' '{if ($1 == s) print $2; else print $1}' | /usr/bin/sed s/^/"$UNIX_USER"_/g)
+        db_name=$(echo "$filename" | /bin/cut -d '/' -f7 | sed s/^"$_SOURCE_DB_USER"/"$UNIX_USER"/g | cut -d '-' -f1 )
 
         echo -e "\nImporting $db_name..."
 
